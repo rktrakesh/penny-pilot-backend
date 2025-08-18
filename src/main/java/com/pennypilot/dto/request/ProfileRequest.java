@@ -1,4 +1,4 @@
-package com.pennypilot.dto;
+package com.pennypilot.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

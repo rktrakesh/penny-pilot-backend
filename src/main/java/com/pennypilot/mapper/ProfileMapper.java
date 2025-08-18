@@ -1,6 +1,6 @@
 package com.pennypilot.mapper;
 
-import com.pennypilot.dto.ProfileRequest;
+import com.pennypilot.dto.request.ProfileRequest;
 import com.pennypilot.model.Profile;
 
 public class ProfileMapper {

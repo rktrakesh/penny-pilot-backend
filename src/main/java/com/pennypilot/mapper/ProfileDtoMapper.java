@@ -1,6 +1,6 @@
 package com.pennypilot.mapper;
 
-import com.pennypilot.dto.ProfileResponse;
+import com.pennypilot.dto.response.ProfileResponse;
 import com.pennypilot.model.Profile;
 
 public class ProfileDtoMapper {

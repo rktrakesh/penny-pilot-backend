@@ -1,7 +1,8 @@
 package com.pennypilot.service;
 
 import com.pennypilot.dto.AuthDto;
-import com.pennypilot.dto.ProfileRequest;
+import com.pennypilot.dto.request.ProfileRequest;
+import com.pennypilot.model.Profile;
 import org.springframework.http.ResponseEntity;
 
 public interface ProfileService {
@@ -13,4 +14,6 @@ public interface ProfileService {
     boolean isAccountActive (String email);
 
     ResponseEntity<?> authenicateAndGenerateToken(AuthDto authDto);
+
+    public Profile getCurrentProfile();
 }

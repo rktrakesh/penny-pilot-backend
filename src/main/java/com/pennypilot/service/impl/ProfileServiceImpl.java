@@ -1,8 +1,8 @@
 package com.pennypilot.service.impl;
 
 import com.pennypilot.dto.AuthDto;
-import com.pennypilot.dto.ProfileRequest;
-import com.pennypilot.dto.ProfileResponse;
+import com.pennypilot.dto.request.ProfileRequest;
+import com.pennypilot.dto.response.ProfileResponse;
 import com.pennypilot.mapper.ProfileDtoMapper;
 import com.pennypilot.mapper.ProfileMapper;
 import com.pennypilot.model.Profile;
@@ -118,6 +118,7 @@ public class ProfileServiceImpl implements ProfileService {
         }
     }
 
+    @Override
     public Profile getCurrentProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return profileRepository.findByEmail(authentication.getName())

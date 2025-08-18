@@ -1,4 +1,4 @@
-package com.pennypilot.dto;
+package com.pennypilot.dto.response;
 
 import lombok.Builder;
 import lombok.Data;

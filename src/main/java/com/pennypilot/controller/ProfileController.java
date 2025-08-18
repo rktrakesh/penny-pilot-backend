@@ -1,7 +1,7 @@
 package com.pennypilot.controller;
 
 import com.pennypilot.dto.AuthDto;
-import com.pennypilot.dto.ProfileRequest;
+import com.pennypilot.dto.request.ProfileRequest;
 import com.pennypilot.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
 @RequiredArgsConstructor
 public class ProfileController {
 

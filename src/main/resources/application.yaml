@@ -36,7 +36,9 @@ spring:
 
 server:
   port: 5353
+  servlet:
+    context-path: /api/v1.0/
 
 email:
   activation:
-    link: http://localhost:5353/api/email/activation?token=
+    link: http://localhost:5353/api/v1.0/email/activation?token=
