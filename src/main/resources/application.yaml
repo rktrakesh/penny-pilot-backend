@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: penny-pilot
+  banner:
+    location: classpath:banner.txt
+
+  # Database connection
+  datasource:
+    url: jdbc:mysql://localhost:3306/money_manager_db
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # JPA & Hibernate settings
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  mail:
+    host: smtp-relay.brevo.com
+    port: 587
+    username: ${BREVO_USERNAME}
+    password: ${BREVO_PASSWORD}
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+server:
+  port: 5353
+
+email:
+  activation:
+    link: http://localhost:5353/api/email/activation?token=
