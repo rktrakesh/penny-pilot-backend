@@ -41,6 +41,7 @@ server:
     context-path: /api/v1.0/
 
 email:
+  id: ${BREVO_FROM_EMAIL}
   activation:
     endpoint: ${EMAIL_ACTIVATION_ENDPOINT}
 

@@ -15,7 +15,7 @@ public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender mail;
 
-    @Value("${BREVO_FROM_EMAIL}")
+    @Value("${email.id}")
     private String fromEmail;
 
     @Override
