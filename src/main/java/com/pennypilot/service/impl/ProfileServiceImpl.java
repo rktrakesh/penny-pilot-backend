@@ -70,9 +70,8 @@ public class ProfileServiceImpl implements ProfileService {
         }
     }
 
-    public String buildActivationEmailBody(Profile profile, String activationLinkBase) {
+    public String buildActivationEmailBody(Profile profile, String activationUrl) {
         String name = profile != null && profile.getFullName() != null ? profile.getFullName() : "there";
-        String activationUrl = activationLinkBase + profile.getActivationToken();
         String year = String.valueOf(java.time.Year.now().getValue());
 
         return String.format("""
