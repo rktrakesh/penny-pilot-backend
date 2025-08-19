@@ -28,7 +28,7 @@ public class NotificationService {
     private final CategoryRepository categoryRepository;
     private final ProfileRepository profileRepository;
 
-    @Value("${money.manager.frontend.url}")
+    @Value("${penny.pilot.frontend.url}")
     private String frontendUrl;
 
     @Scheduled(cron = "0 0 21 * * *", zone = "IST") // Every day at 9 PM

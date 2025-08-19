@@ -1,6 +1,8 @@
 spring:
   application:
     name: penny-pilot
+  profiles:
+    active: prod
   banner:
     location: classpath:banner.txt
 
@@ -19,7 +21,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.MySQL8Dialect
 
   mail:
     host: smtp-relay.brevo.com
@@ -41,9 +42,11 @@ server:
 
 email:
   activation:
-    link: http://localhost:5353/api/v1.0/email/activation?token=
+    endpoint: ${EMAIL_ACTIVATION_ENDPOINT}
 
-money:
-  manager:
+penny:
+  pilot:
+    backend:
+      url: ${PENNY_PILOT_BACKEND_URL}
     frontend:
-      url: http://localhost:5173
+      url: ${PENNY_PILOT_FRONTEND_URL}

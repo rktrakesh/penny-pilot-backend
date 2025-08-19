@@ -1,0 +1,12 @@
+# Database connection
+spring:
+  datasource:
+    url: jdbc:postgresql://dpg-d2ibje1r0fns738u167g-a.singapore-postgres.render.com/pennypilot_ijrx
+    username: pennypilot_ijrx_user
+    password: ELn7bb7WnmlfkkCMqoQIjygxb2Ycd7bz
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    properties:
+      hibernate:
+      jdbc.lob.non_contextual_creation: true

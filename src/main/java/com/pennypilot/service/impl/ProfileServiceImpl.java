@@ -37,8 +37,11 @@ public class ProfileServiceImpl implements ProfileService {
     private final JwtUtil jwtUtil;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    @Value("${email.activation.link}")
-    private String activationLink;
+    @Value("${penny.pilot.backend.url}")
+    private String activationUrl;
+
+    @Value("${email.activation.endpoint}")
+    private String activationEndpoint;
 
     @Override
     public ResponseEntity<?> registerNewProfile(ProfileRequest request) {
@@ -56,7 +59,7 @@ public class ProfileServiceImpl implements ProfileService {
 
             // Mail activation
             log.info("Email verification link send starts.");
-            String accountActivationLink = activationLink + profile.getActivationToken();
+            String accountActivationLink = activationUrl + activationEndpoint + profile.getActivationToken();
             String subject = "Activate your Penny Pilot account";
             String body = buildActivationEmailBody(profile, accountActivationLink);
             emailService.sendEmail(profile.getEmail(), subject, body);
