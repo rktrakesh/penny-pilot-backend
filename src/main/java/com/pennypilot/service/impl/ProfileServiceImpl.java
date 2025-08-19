@@ -58,13 +58,55 @@ public class ProfileServiceImpl implements ProfileService {
             log.info("Email verification link send starts.");
             String accountActivationLink = activationLink + profile.getActivationToken();
             String subject = "Activate your Penny Pilot account";
-            String body = "Click the following link to activate your account: " + accountActivationLink;
+            String body = buildActivationEmailBody(profile, accountActivationLink);
             emailService.sendEmail(profile.getEmail(), subject, body);
             return ResponseEntity.status(HttpStatus.CREATED).body(ProfileDtoMapper.mapToDto(register));
         } catch (Exception e) {
             log.error("Exception while registerNewProfile: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception while registerNewProfile: " + e.getMessage());
         }
+    }
+
+    public String buildActivationEmailBody(Profile profile, String activationLinkBase) {
+        String name = profile != null && profile.getFullName() != null ? profile.getFullName() : "there";
+        String activationUrl = activationLinkBase + profile.getActivationToken();
+        String year = String.valueOf(java.time.Year.now().getValue());
+
+        return String.format("""
+        <div style="display:flex; justify-content:center; align-items:center; text-align:center; width:100%%;">
+            <div style="max-width:600px; margin:auto; padding:20px; font-family:Segoe UI,Roboto,Helvetica,Arial,sans-serif;">
+
+                <div style="font-size:26px;font-weight:700;color:#f97316;margin-bottom:10px">
+                    PennyPilot
+                </div>
+
+                <div style="font-size:20px;font-weight:600;color:#111827;margin-bottom:12px">
+                    Activate Your Account
+                </div>
+
+                <div style="font-size:15px;color:#374151;margin-bottom:14px;line-height:1.4">
+                    Hi %s 👋,<br>
+                    You're just one step away from unlocking your personal finance dashboard.
+                </div>
+
+                <div style="font-size:15px;color:#374151;margin-bottom:20px;line-height:1.4">
+                    To get started, please activate your account by clicking the link below.
+                    This helps us verify your email and keep your data secure.
+                </div>
+
+                <div style="margin-bottom:22px; font-size:16px;">
+                    <b><a href="%s" target="_blank" style="color:#f97316; text-decoration:underline;">
+                        Click here to Activate Your Account
+                    </a></b>
+                </div>
+
+                <div style="font-size:12px;color:#9ca3af;margin-top:10px">
+                    © %s PennyPilot — Your trusted daily finance companion.
+                </div>
+
+            </div>
+        </div>
+        """, name, activationUrl, year);
     }
 
     @Override
