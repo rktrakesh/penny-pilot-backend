@@ -11,6 +11,7 @@ import com.pennypilot.service.ExpenseService;
 import com.pennypilot.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -132,6 +133,46 @@ public class ExpenseServiceImpl implements ExpenseService {
         } catch (Exception e) {
             log.info("Error while fetching total expenses: {}", e.getMessage());
             return BigDecimal.ZERO;
+        }
+    }
+
+    @Override
+    public List<ExpenseResponse> findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(LocalDateTime startDate,
+                                                                                  LocalDateTime endDate,
+                                                                                  String name,
+                                                                                  Sort sort) {
+        try {
+            log.info("Finding expenses by date range: {} to {}, name: {}", startDate, endDate, name);
+            Profile currentProfile = profileService.getCurrentProfile();
+            List<Expense> expenses = expenseRepository.findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(currentProfile.getId(), startDate, endDate, name, sort);
+            if (expenses.isEmpty()) {
+                log.info("No expenses found for the given criteria");
+                return List.of();
+            }
+            log.info("Expenses found: {}", expenses);
+            return expenses.stream().map(this::mapToExpenseResponse).toList();
+        } catch (Exception e) {
+            log.error("Error while finding expenses by profile ID, date range, and name: {}", e.getMessage());
+            return List.of();
+        }
+    }
+
+    @Override
+    public List<ExpenseResponse> findByProfileIdAndDateBetween(Long profileId, LocalDateTime startDate, LocalDateTime endDate) {
+        try {
+            log.info("Fetching today expense for user");
+            LocalDate now = LocalDate.now();
+            LocalDateTime startOfMonth = now.withDayOfMonth(1).atStartOfDay();
+            LocalDateTime endOfMonth = now.withDayOfMonth(now.lengthOfMonth()).atTime(LocalTime.MAX);
+            List<Expense> expenses = expenseRepository.findByProfileIdAndDateBetween(profileId, startOfMonth, endOfMonth);
+            if (expenses.isEmpty()) {
+                log.info("No Expense found for the Today.");
+                return List.of();
+            }
+            return expenses.stream().map(this::mapToExpenseResponse).toList();
+        } catch (Exception e) {
+            log.info("Error while fetching today expense: {}", e.getMessage());
+            return List.of();
         }
     }
 

@@ -12,6 +12,7 @@ import com.pennypilot.service.IncomeService;
 import com.pennypilot.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -134,6 +135,28 @@ public class IncomeServiceImpl implements IncomeService {
         } catch (Exception e) {
             log.info("Error while fetching total incomes: {}", e.getMessage());
             return BigDecimal.ZERO;
+        }
+    }
+
+    @Override
+    public List<IncomeResponse> findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(LocalDateTime startDate,
+                                                                                 LocalDateTime endDate,
+                                                                                 String name,
+                                                                                 Sort sort) {
+        try {
+            log.info("Fetching incomes by date range: {} to {}, name: {}, sort: {}",
+                    startDate, endDate, name, sort);
+            Profile currentProfile = profileService.getCurrentProfile();
+            List<Income> incomes = incomeRepository.findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(currentProfile.getId(), startDate, endDate, name, sort);
+            if (incomes.isEmpty()) {
+                log.info("No incomes found for the given criteria");
+                return List.of();
+            }
+            log.info("Incomes fetched successfully: {}", incomes);
+            return incomes.stream().map(this::mapToExpenseResponse).toList();
+        } catch (Exception e) {
+            log.error("Error while fetching incomes by profile ID and date range: {}", e.getMessage());
+            return List.of();
         }
     }
 

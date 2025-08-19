@@ -62,6 +62,4 @@ public interface IncomeRepository extends JpaRepository <Income, Long> {
      */
     List<Income> findByProfileIdAndDateBetween(Long profileId, LocalDateTime startDate, LocalDateTime endDate);
 
-
-
 }

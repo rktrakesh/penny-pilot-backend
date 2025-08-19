@@ -42,3 +42,8 @@ server:
 email:
   activation:
     link: http://localhost:5353/api/v1.0/email/activation?token=
+
+money:
+  manager:
+    frontend:
+      url: http://localhost:5173
