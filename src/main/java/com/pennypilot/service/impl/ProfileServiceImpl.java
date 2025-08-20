@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -153,12 +154,17 @@ public class ProfileServiceImpl implements ProfileService {
             String jwtToken = jwtUtil.generateToken(authDto.getEmail());
             Map<String, Object> token = Map.of(
                     "token", jwtToken,
-                    "user", getPublicProfile(authDto.getEmail() != null ? authDto.getEmail() : null)
+                    "user", getPublicProfile(authDto.getEmail())
             );
             return ResponseEntity.ok(token);
+        } catch (BadCredentialsException e) {  // specific exception
+            log.error("Invalid credentials: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Invalid email or password"));
         } catch (Exception e) {
-            log.error("Exception while authenticating and generating token: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Invalid email or password: " + e.getMessage());
+            log.error("Exception while generating token: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Server error: " + e.getMessage()));
         }
     }
 

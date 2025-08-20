@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 public class ProfileController {
@@ -26,21 +28,18 @@ public class ProfileController {
 
     @PostMapping("/login")
     public ResponseEntity<?> isAccountActive(@RequestBody AuthDto authDto) {
-        try {
-            if (authDto == null || authDto.getEmail() == null) {
-                return ResponseEntity.badRequest().body("Email must not be null");
-            }
-            boolean active = profileService.isAccountActive(authDto.getEmail());
-            if (!active) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Account is not active, please activate your account first");
-            }
-            return profileService.authenicateAndGenerateToken(authDto);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Internal server error: " + e.getMessage());
+        if (authDto == null || authDto.getEmail() == null || authDto.getPassword() == null) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Email and password must not be null"));
         }
-    }
 
+        boolean active = profileService.isAccountActive(authDto.getEmail());
+        if (!active) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Account is not active, please activate first"));
+        }
+
+        return profileService.authenicateAndGenerateToken(authDto);
+    }
 
 }
