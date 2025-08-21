@@ -13,6 +13,7 @@ import com.pennypilot.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -65,6 +66,9 @@ public class ProfileServiceImpl implements ProfileService {
             String body = buildActivationEmailBody(profile, accountActivationLink);
             emailService.sendEmail(profile.getEmail(), subject, body);
             return ResponseEntity.status(HttpStatus.CREATED).body(ProfileDtoMapper.mapToDto(register));
+        } catch (DataIntegrityViolationException e) {
+            log.warn("Duplicate email detected: {}", request);
+            return ResponseEntity.status(HttpStatus.OK).body("Activation email has already been sent.");
         } catch (Exception e) {
             log.error("Exception while registerNewProfile: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception while registerNewProfile: " + e.getMessage());
