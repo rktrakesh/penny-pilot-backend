@@ -68,7 +68,7 @@ public class ProfileServiceImpl implements ProfileService {
             return ResponseEntity.status(HttpStatus.CREATED).body(ProfileDtoMapper.mapToDto(register));
         } catch (DataIntegrityViolationException e) {
             log.warn("Duplicate email detected: {}", request);
-            return ResponseEntity.status(HttpStatus.OK).body("Activation email has already been sent.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("This email is already registered. Please use a different email to sign up.");
         } catch (Exception e) {
             log.error("Exception while registerNewProfile: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception while registerNewProfile: " + e.getMessage());
