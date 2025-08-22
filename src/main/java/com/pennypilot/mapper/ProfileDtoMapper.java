@@ -9,6 +9,7 @@ public class ProfileDtoMapper {
                 .id(profile.getId())
                 .fullName(profile.getFullName())
                 .email(profile.getEmail())
+                .profileImageUrl(profile.getProfileImageUrl())
                 .activationToken(profile.getActivationToken())
                 .createdAt(profile.getCreatedAt())
                 .modifiedAt(profile.getModifiedAt())
